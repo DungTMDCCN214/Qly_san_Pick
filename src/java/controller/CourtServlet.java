@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author Admin
  */
-@WebServlet("/court")
+@WebServlet("/admin/court")
 public class CourtServlet extends HttpServlet {
 
     CourtDAO dao = new CourtDAO();
@@ -38,23 +38,23 @@ public class CourtServlet extends HttpServlet {
             case "delete" -> {
                 int id = Integer.parseInt(request.getParameter("id"));
                 dao.deleteCourt(id);
-                response.sendRedirect("court");
+                response.sendRedirect(request.getContextPath() + "/admin/court");
             }
             case "edit" -> {
                 int editId = Integer.parseInt(request.getParameter("id"));
                 Court c = dao.getCourtById(editId);
                 request.setAttribute("court", c);
-                request.getRequestDispatcher("WEB-INF/jsp/edit-court.jsp").forward(request, (ServletResponse) response);
+                request.getRequestDispatcher("/WEB-INF/jsp/Admin/Court/edit-court.jsp").forward(request, (ServletResponse) response);
             }
             case "add" ->{
-                request.getRequestDispatcher("WEB-INF/jsp/add-court.jsp")
+                request.getRequestDispatcher("/WEB-INF/jsp/Admin/Court/add-court.jsp")
                         .forward(request, response);
             }
 
             default -> {
                 List<Court> list = dao.getAllCourts();
                 request.setAttribute("list", list);
-                request.getRequestDispatcher("WEB-INF/jsp/court-list.jsp").forward(request, (ServletResponse) response);
+                request.getRequestDispatcher("/WEB-INF/jsp/Admin/Court/court-list.jsp").forward(request, (ServletResponse) response);
             }
         }
     }
@@ -75,6 +75,6 @@ public class CourtServlet extends HttpServlet {
         } else {
             dao.insertCourt(new Court(0, name, price, status, desc));
         }
-        response.sendRedirect("court");
+        response.sendRedirect(request.getContextPath() + "/admin/court");
     }
 }
