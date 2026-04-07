@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.util.List;
+
 /**
  *
  * @author Admin
@@ -11,13 +13,33 @@ package model;
 public class Court {
     private int court_id;
     private String court_name;
-    private double price_per_hour;
+    private int price_per_hour;
     private String status;
     private String description;
+    private String imgUrl;
+    
+    
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public Court(int court_id, String court_name, int price_per_hour, String status, String description, String imgUrl) {
+        this.court_id = court_id;
+        this.court_name = court_name;
+        this.price_per_hour = price_per_hour;
+        this.status = status;
+        this.description = description;
+        this.imgUrl = imgUrl;
+    }
     
     public Court(){}
 
-    public Court(int court_id, String court_name, double price_per_hour, String status, String description) {
+    public Court(int court_id, String court_name, int price_per_hour, String status, String description) {
         this.court_id = court_id;
         this.court_name = court_name;
         this.price_per_hour = price_per_hour;
@@ -43,11 +65,11 @@ public class Court {
         this.court_name = court_name;
     }
 
-    public double getPrice_per_hour() {
+    public int getPrice_per_hour() {
         return price_per_hour;
     }
 
-    public void setPrice_per_hour(double price_per_hour) {
+    public void setPrice_per_hour(int price_per_hour) {
         this.price_per_hour = price_per_hour;
     }
 
