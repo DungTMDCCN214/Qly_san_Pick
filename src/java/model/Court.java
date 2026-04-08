@@ -13,13 +13,12 @@ import java.util.List;
 public class Court {
     private int court_id;
     private String court_name;
-    private int price_per_hour;
+    private double price_per_hour;
     private String status;
     private String description;
     private String imgUrl;
     
-    
-
+    // Getter và Setter cho imgUrl
     public String getImgUrl() {
         return imgUrl;
     }
@@ -28,7 +27,8 @@ public class Court {
         this.imgUrl = imgUrl;
     }
 
-    public Court(int court_id, String court_name, int price_per_hour, String status, String description, String imgUrl) {
+    // Constructor đầy đủ 6 tham số (CÓ imgUrl)
+    public Court(int court_id, String court_name, double price_per_hour, String status, String description, String imgUrl) {
         this.court_id = court_id;
         this.court_name = court_name;
         this.price_per_hour = price_per_hour;
@@ -37,18 +37,20 @@ public class Court {
         this.imgUrl = imgUrl;
     }
     
-    public Court(){}
-
-    public Court(int court_id, String court_name, int price_per_hour, String status, String description) {
+    // Constructor 5 tham số (KHÔNG imgUrl) - GIỮ LẠI ĐỂ TƯƠNG THÍCH VỚI CODE CŨ
+    public Court(int court_id, String court_name, double price_per_hour, String status, String description) {
         this.court_id = court_id;
         this.court_name = court_name;
         this.price_per_hour = price_per_hour;
         this.status = status;
         this.description = description;
+        this.imgUrl = null; // Mặc định null nếu không có ảnh
     }
     
-    
+    // Constructor mặc định
+    public Court() {}
 
+    // Getter và Setter
     public int getCourt_id() {
         return court_id;
     }
@@ -65,11 +67,11 @@ public class Court {
         this.court_name = court_name;
     }
 
-    public int getPrice_per_hour() {
+    public double getPrice_per_hour() {
         return price_per_hour;
     }
 
-    public void setPrice_per_hour(int price_per_hour) {
+    public void setPrice_per_hour(double price_per_hour) {
         this.price_per_hour = price_per_hour;
     }
 
@@ -88,6 +90,4 @@ public class Court {
     public void setDescription(String description) {
         this.description = description;
     }
-    
-    
 }

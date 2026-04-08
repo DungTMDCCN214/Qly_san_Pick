@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.Booking;
 
 /**
@@ -42,11 +42,12 @@ public class UserListBooking extends HttpServlet {
         try {
             list = dao.getBookingsByUser(userId);
         } catch (SQLException ex) {
+            System.out.print(ex.getMessage());
             Logger.getLogger(UserListBooking.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         request.setAttribute("bookings", list);
-        request.getRequestDispatcher("User/user-list-bookings.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/jsp/User/user-list-bookings.jsp").forward(request, response);
     }
 
 }

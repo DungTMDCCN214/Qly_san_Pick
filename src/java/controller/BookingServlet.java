@@ -10,12 +10,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.Booking;
 import model.Court;
 
@@ -84,8 +84,8 @@ public class BookingServlet extends HttpServlet {
             if (court == null) {
                 throw new Exception("Không tìm thấy sân!");
             }
-            int pricePerHour = court.getPrice_per_hour(); // lấy từ DB
-            int totalPrice = pricePerHour * slots.size();
+            double pricePerHour = court.getPrice_per_hour(); // lấy từ DB
+            double totalPrice = pricePerHour * slots.size();
 
             // 4. Tạo Booking object
             Booking booking = new Booking();
@@ -108,13 +108,13 @@ public class BookingServlet extends HttpServlet {
 //                request.getRequestDispatcher("User/booking.jsp").forward(request, response);
             } else {
                 request.setAttribute("error", "Đặt sân thất bại! Có thể bị trùng giờ.");
-                request.getRequestDispatcher("User/booking.jsp").forward(request, response);
+                request.getRequestDispatcher("WEB-INF/jsp/User/booking.jsp").forward(request, response);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Lỗi hệ thống!");
-            request.getRequestDispatcher("User/booking.jsp").forward(request, response);
+            request.getRequestDispatcher("WEB-INF/jsp/User/booking.jsp").forward(request, response);
         }
     }
 
@@ -134,7 +134,7 @@ public class BookingServlet extends HttpServlet {
         Court court = dao.getCourtById(courtId);
         request.setAttribute("courtId", courtId);
         request.setAttribute("court", court);
-        request.getRequestDispatcher("User/booking.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/jsp/User/booking.jsp").forward(request, response);
     }
 
     /**
@@ -151,7 +151,7 @@ public class BookingServlet extends HttpServlet {
 
         if (dateStr == null || dateStr.trim().isEmpty()) {
             request.setAttribute("error", "Vui lòng chọn ngày!");
-            request.getRequestDispatcher("User/booking.jsp").forward(request, response);
+            request.getRequestDispatcher("WEB-INF/jsp/User/booking.jsp").forward(request, response);
             return null;
         }
 
@@ -163,7 +163,7 @@ public class BookingServlet extends HttpServlet {
 
             if (bookingDate.isBefore(today)) {
                 request.setAttribute("error", "Không thể đặt ngày trong quá khứ!");
-                request.getRequestDispatcher("User/booking.jsp").forward(request, response);
+                request.getRequestDispatcher("WEB-INF/jsp/User/booking.jsp").forward(request, response);
                 return null;
             }
 
@@ -171,7 +171,7 @@ public class BookingServlet extends HttpServlet {
 
         } catch (Exception e) {
             request.setAttribute("error", "Ngày không hợp lệ!");
-            request.getRequestDispatcher("User/booking.jsp").forward(request, response);
+            request.getRequestDispatcher("WEB-INF/jsp/User/booking.jsp").forward(request, response);
             return null;
         }
     }
@@ -184,7 +184,7 @@ public class BookingServlet extends HttpServlet {
 
         if (slotParams == null || slotParams.length == 0) {
             request.setAttribute("error", "Vui lòng chọn ít nhất 1 khung giờ!");
-            request.getRequestDispatcher("User/booking.jsp").forward(request, response);
+            request.getRequestDispatcher("WEB-INF/jsp/User/booking.jsp").forward(request, response);
             return null;
         }
 
@@ -196,7 +196,7 @@ public class BookingServlet extends HttpServlet {
             }
         } catch (Exception e) {
             request.setAttribute("error", "Slot không hợp lệ!");
-            request.getRequestDispatcher("User/booking.jsp").forward(request, response);
+            request.getRequestDispatcher("WEB-INF/jsp/User/booking.jsp").forward(request, response);
             return null;
         }
 
@@ -218,7 +218,7 @@ public class BookingServlet extends HttpServlet {
             for (int slot : slots) {
                 if (slot <= currentHour) {
                     request.setAttribute("error", "Không thể đặt giờ đã qua!");
-                    request.getRequestDispatcher("User/booking.jsp").forward(request, response);
+                    request.getRequestDispatcher("WEB-INF/jsp/User/booking.jsp").forward(request, response);
                     return false;
                 }
             }

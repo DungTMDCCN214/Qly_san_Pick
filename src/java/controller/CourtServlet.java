@@ -7,17 +7,12 @@ package controller;
 import dao.CourtDAO;
 import model.Court;
 
-//import jakarta.servlet.ServletException;
-//import jakarta.servlet.ServletResponse;
-//import jakarta.servlet.annotation.WebServlet;
-//import jakarta.servlet.http.HttpServlet;
-//import jakarta.servlet.http.HttpServletRequest;
-//import jakarta.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -73,12 +68,21 @@ public class CourtServlet extends HttpServlet {
         double price = Double.parseDouble(request.getParameter("price"));
         String status = request.getParameter("status");
         String desc = request.getParameter("description");
+        
+        // Lấy imgUrl từ request (THÊM MỚI)
+        String imgUrl = request.getParameter("imgUrl");
+        // Nếu imgUrl null hoặc rỗng thì set thành null để lưu vào DB
+        if (imgUrl != null && imgUrl.trim().isEmpty()) {
+            imgUrl = null;
+        }
 
         if ("update".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
-            dao.updateCourt(new Court(id, name, price, status, desc));
+            // Cập nhật có bao gồm imgUrl
+            dao.updateCourt(new Court(id, name, price, status, desc, imgUrl));
         } else {
-            dao.insertCourt(new Court(0, name, price, status, desc));
+            // Thêm mới có bao gồm imgUrl
+            dao.insertCourt(new Court(0, name, price, status, desc, imgUrl));
         }
         response.sendRedirect(request.getContextPath() + "/admin/court");
     }

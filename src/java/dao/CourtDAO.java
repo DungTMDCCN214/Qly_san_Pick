@@ -4,15 +4,6 @@
  */
 package dao;
 
-/**
- *
- * @author ADMIN
- */
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 
 
 /**
@@ -34,24 +25,22 @@ public class CourtDAO {
     Connection connection;
     
     public CourtDAO() {
-        try {
-            String jdbcURL = "jdbc:mysql://localhost:3306/quanly_sanpick?useUnicode=true&characterEncoding=UTF-8";
-            String jdbcUsername = "root";
-            String jdbcPassword = "admin";
+        try{
+            String url = "jdbc:sqlserver://localhost;databaseName=QLy_san_Pick;encrypt=true;trustServerCertificate=true";
+            String user = "sa";
+            String pass = "123456";
 
 
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
-
-
-        } catch (Exception e) {
-            e.printStackTrace(); 
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            connection = (Connection) DriverManager.getConnection(url, user, pass);
+        } catch(Exception e){
+            e.printStackTrace();
         }
     }
     // GET ALL
     public List<Court> getAllCourts() {
         List<Court> list = new ArrayList<>();
-        String sql = "SELECT * FROM courts";
+        String sql = "SELECT * FROM Courts";
 
         try (PreparedStatement ps = connection.prepareStatement(sql); 
                 ResultSet rs = ps.executeQuery()) {
@@ -59,10 +48,10 @@ public class CourtDAO {
                 Court c = new Court(
                         rs.getInt("court_id"),
                         rs.getString("court_name"),
-                        rs.getInt("price_per_hour"),
+                        rs.getDouble("price_per_hour"),
                         rs.getString("status"),
                         rs.getString("description"),
-                        rs.getString("img_URL"));
+                        rs.getString("imgUrl"));
                 list.add(c);
             }
         } catch(Exception e){
@@ -71,27 +60,28 @@ public class CourtDAO {
         return list;
     }
     
-    // INSERT
+    // INSERT (ĐÃ CẬP NHẬT THÊM img_URL)
     public void insertCourt(Court c){
-    String sql = "INSERT INTO courts(court_name, price_per_hour, status, description) VALUES(?, ?, ?, ?)";
+        String sql = "INSERT INTO Courts(court_name, price_per_hour, status, description, imgUrl) VALUES(?, ?, ?, ?, ?)";
 
-    try(PreparedStatement ps = connection.prepareStatement(sql)){
-        ps.setString(1, c.getCourt_name());
-        ps.setDouble(2, c.getPrice_per_hour());
-        ps.setString(3, c.getStatus());
-        ps.setString(4, c.getDescription());
+        try(PreparedStatement ps = connection.prepareStatement(sql)){
+            ps.setString(1, c.getCourt_name());
+            ps.setDouble(2, c.getPrice_per_hour());
+            ps.setString(3, c.getStatus());
+            ps.setString(4, c.getDescription());
+            ps.setString(5, c.getImgUrl()); // THÊM DÒNG NÀY
 
-        int rows = ps.executeUpdate();
-        System.out.println("INSERT ROWS = " + rows);
+            int rows = ps.executeUpdate();
+            System.out.println("INSERT ROWS = " + rows);
 
-    } catch(Exception e){
-        e.printStackTrace();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
-}
     
     // DELETE
     public void deleteCourt(int id){
-        String sql = "DELETE FROM courts WHERE court_id = ?";
+        String sql = "DELETE FROM Courts WHERE court_id = ?";
         
         try(PreparedStatement ps = connection.prepareStatement(sql)){
             ps.setInt(1, id);
@@ -103,7 +93,7 @@ public class CourtDAO {
     
     // GET BY ID
     public Court getCourtById(int id){
-        String sql = "SELECT * FROM courts WHERE court_id = ?";
+        String sql = "SELECT * FROM Courts WHERE court_id = ?";
         try(PreparedStatement ps = connection.prepareStatement(sql)){
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
@@ -112,10 +102,10 @@ public class CourtDAO {
                 return new Court(
                         rs.getInt("court_id"),
                         rs.getString("court_name"),
-                        rs.getInt("price_per_hour"),
+                        rs.getDouble("price_per_hour"),
                         rs.getString("status"),
                         rs.getString("description"),
-                        rs.getString("img_URL")
+                        rs.getString("imgUrl")
                 );
             }
         } catch(SQLException e){
@@ -124,16 +114,17 @@ public class CourtDAO {
         return null;
     }
     
-    // UPDATE
+    // UPDATE (ĐÃ CẬP NHẬT THÊM img_URL)
     public void updateCourt(Court c){
-        String sql = "UPDATE courts SET court_name=?, price_per_hour=?, status=?, description=? WHERE court_id=?";
+        String sql = "UPDATE Courts SET court_name=?, price_per_hour=?, status=?, description=?, imgUrl=? WHERE court_id=?";
         
         try(PreparedStatement ps = connection.prepareStatement(sql)){
             ps.setString(1, c.getCourt_name());
             ps.setDouble(2, c.getPrice_per_hour());
-            ps.setString(3,c.getStatus());
+            ps.setString(3, c.getStatus());
             ps.setString(4, c.getDescription());
-            ps.setInt(5, c.getCourt_id());
+            ps.setString(5, c.getImgUrl()); // THÊM DÒNG NÀY
+            ps.setInt(6, c.getCourt_id());
             
             ps.executeUpdate();
         } catch(Exception e){

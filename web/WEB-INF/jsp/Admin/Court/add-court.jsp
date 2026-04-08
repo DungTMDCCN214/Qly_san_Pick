@@ -123,6 +123,19 @@
             margin: 1.5rem 0;
             border-top: 2px dotted #cbd5e1;
         }
+        
+        .image-preview {
+            margin-top: 0.5rem;
+            display: none;
+        }
+        
+        .image-preview img {
+            max-width: 100%;
+            max-height: 150px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            padding: 4px;
+        }
     </style>
 </head>
 
@@ -175,6 +188,22 @@
                         </select>
                     </div>
 
+                    <!-- URL Ảnh (THÊM MỚI) -->
+                    <div class="mb-4">
+                        <label class="form-label">
+                            <i class="fas fa-image me-1"></i> URL ảnh sân
+                        </label>
+                        <input type="url" name="imgUrl" class="form-control" 
+                               placeholder="https://example.com/images/court.jpg"
+                               onkeyup="previewImage(this.value)">
+                        <div class="form-text text-muted small mt-1">
+                            * Nhập đường dẫn URL ảnh của sân (có thể để trống)
+                        </div>
+                        <div class="image-preview" id="imagePreview">
+                            <img id="previewImg" src="" alt="Xem trước ảnh">
+                        </div>
+                    </div>
+
                     <!-- Mô tả -->
                     <div class="mb-4">
                         <label class="form-label">
@@ -203,6 +232,26 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Hàm xem trước ảnh
+    function previewImage(url) {
+        const previewDiv = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        
+        if (url && url.trim() !== '') {
+            previewImg.src = url;
+            previewDiv.style.display = 'block';
+            // Nếu ảnh lỗi thì ẩn đi
+            previewImg.onerror = function() {
+                previewDiv.style.display = 'none';
+            };
+        } else {
+            previewDiv.style.display = 'none';
+            previewImg.src = '';
+        }
+    }
+</script>
 
 <!-- Bootstrap JS (optional) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

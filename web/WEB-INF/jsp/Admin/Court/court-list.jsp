@@ -162,6 +162,26 @@
         .table-responsive {
             border-radius: 20px;
         }
+        
+        .court-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .no-image {
+            width: 60px;
+            height: 60px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 1.5rem;
+        }
     </style>
 </head>
 
@@ -185,11 +205,12 @@
             <table class="table table-bordered table-hover table-custom align-middle text-center">
                 <thead>
                     <tr>
-                        <th width="8%"><i class="fas fa-hashtag me-1"></i> ID</th>
+                        <th width="5%"><i class="fas fa-hashtag me-1"></i> ID</th>
+                        <th width="10%"><i class="fas fa-image me-1"></i> Ảnh</th>
                         <th><i class="fas fa-court me-1"></i> Tên sân</th>
-                        <th width="20%"><i class="fas fa-tag me-1"></i> Giá / giờ</th>
-                        <th width="15%"><i class="fas fa-circle-info me-1"></i> Trạng thái</th>
-                        <th width="22%"><i class="fas fa-tools me-1"></i> Hành động</th>
+                        <th width="15%"><i class="fas fa-tag me-1"></i> Giá / giờ</th>
+                        <th width="12%"><i class="fas fa-circle-info me-1"></i> Trạng thái</th>
+                        <th width="18%"><i class="fas fa-tools me-1"></i> Hành động</th>
                     </tr>
                 </thead>
 
@@ -211,9 +232,29 @@
                                 } else {
                                     priceDisplay = String.valueOf(priceObj);
                                 }
+                                
+                                // Lấy URL ảnh
+                                String imgUrl = c.getImgUrl();
                     %>
                     <tr>
                         <td class="fw-bold">#<%= c.getCourt_id() %></td>
+                        
+                        <!-- Cột hiển thị ảnh -->
+                        <td>
+                            <% if (imgUrl != null && !imgUrl.trim().isEmpty()) { %>
+                                <img src="<%= imgUrl %>" alt="<%= c.getCourt_name() %>" 
+                                     class="court-img" 
+                                     onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="no-image" style="display: none;">
+                                    <i class="fas fa-image"></i>
+                                </div>
+                            <% } else { %>
+                                <div class="no-image">
+                                    <i class="fas fa-image"></i>
+                                </div>
+                            <% } %>
+                        </td>
+                        
                         <td class="fw-semibold"><%= c.getCourt_name() %></td>
                         <td class="price-text">
                             <%= priceDisplay %> <span style="font-weight: normal;">VNĐ</span>
@@ -249,7 +290,7 @@
                         } else {
                     %>
                         <tr>
-                            <td colspan="5" class="py-4 text-muted">
+                            <td colspan="6" class="py-4 text-muted">
                                 <i class="fas fa-frown me-2"></i> Chưa có sân nào. Hãy nhấn "Thêm sân" để tạo mới!
                             </td>
                         </tr>

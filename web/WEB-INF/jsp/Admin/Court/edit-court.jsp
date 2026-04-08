@@ -134,6 +134,41 @@
             margin: 1.5rem 0;
             border-top: 2px dotted #cbd5e1;
         }
+        
+        .current-image {
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: #f8fafc;
+            border-radius: 16px;
+            text-align: center;
+        }
+        
+        .current-image img {
+            max-width: 100%;
+            max-height: 150px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            padding: 4px;
+        }
+        
+        .image-preview {
+            margin-top: 0.5rem;
+            display: none;
+        }
+        
+        .image-preview img {
+            max-width: 100%;
+            max-height: 150px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            padding: 4px;
+        }
+        
+        .image-note {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
     </style>
 </head>
 
@@ -201,6 +236,35 @@
                         </select>
                     </div>
 
+                    <!-- URL Ảnh (THÊM MỚI) -->
+                    <div class="mb-4">
+                        <label class="form-label">
+                            <i class="fas fa-image me-1"></i> URL ảnh sân
+                        </label>
+                        <input type="url" name="imgUrl" class="form-control" 
+                               value="<%= c.getImgUrl() != null ? c.getImgUrl() : "" %>"
+                               placeholder="https://example.com/images/court.jpg"
+                               onkeyup="previewImage(this.value)">
+                        <div class="image-note">
+                            <i class="fas fa-info-circle me-1"></i> Nhập đường dẫn URL ảnh của sân (có thể để trống)
+                        </div>
+                        
+                        <!-- Hiển thị ảnh hiện tại nếu có -->
+                        <% if (c.getImgUrl() != null && !c.getImgUrl().trim().isEmpty()) { %>
+                            <div class="current-image" id="currentImage">
+                                <img src="<%= c.getImgUrl() %>" alt="Ảnh hiện tại" 
+                                     onerror="this.onerror=null; this.parentElement.style.display='none';">
+                                <div class="image-note mt-1">📷 Ảnh hiện tại</div>
+                            </div>
+                        <% } %>
+                        
+                        <!-- Khung xem trước ảnh mới -->
+                        <div class="image-preview" id="imagePreview">
+                            <img id="previewImg" src="" alt="Xem trước ảnh mới">
+                            <div class="image-note mt-1">🔍 Xem trước ảnh mới</div>
+                        </div>
+                    </div>
+
                     <!-- Mô tả -->
                     <div class="mb-4">
                         <label class="form-label">
@@ -228,6 +292,27 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Hàm xem trước ảnh mới
+    function previewImage(url) {
+        const previewDiv = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        const currentImageDiv = document.getElementById('currentImage');
+        
+        if (url && url.trim() !== '' && url !== '<%= c.getImgUrl() != null ? c.getImgUrl() : "" %>') {
+            previewImg.src = url;
+            previewDiv.style.display = 'block';
+            // Nếu ảnh lỗi thì ẩn đi
+            previewImg.onerror = function() {
+                previewDiv.style.display = 'none';
+            };
+        } else {
+            previewDiv.style.display = 'none';
+            previewImg.src = '';
+        }
+    }
+</script>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
